@@ -33,14 +33,22 @@
                         <form>
                             <fieldset class="form-group">
                                 <label for="questName">Name Your Quest</label>
-                                <input id="questName" type="text" class="form-control" placeholder="Your quest here!" maxlength ="16">
+                                <input id="questNameInput" type="text" class="form-control" placeholder="Your quest here!" maxlength ="32">
                                 <small class="text-muted">What do you want to do?</small>
                             </fieldset>
                         </form>
                     </div>
                     
                     <div id="slide2" class="slide animate">
-                        <h></h>
+                        <fieldset class="form-group">
+                            <h></h>
+                            <label for="questDescription">Describe your quest!</label>
+                            <textarea class="form-control" id="questDescrInput" rows="3" 
+                             placeholder="Write a short description of your quest!"
+                             maxlength = "512"></textarea>
+                            <button type="button" class="btn btn-secondary btn-block disabled" id="questDescrButton">Submit</button>
+                        </fieldset>
+                        
                     </div>
                     
                     <div id="slide3" class="slide animate">
