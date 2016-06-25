@@ -25,15 +25,44 @@ $(document).ready(function () {
     //set enabled/disabled states for buttons
     function setButtonState() {
         switch (currentSlide) {
+            //Quest title page
             case 0: 
+                //Can't go back
                 $('.left > .btn').prop('disabled', true);
+                
+                //Make sure no proceeding if the title is invalid
                 if(!validTitle) {
                     $('.right > .btn').prop('disabled', true);
                 }
+                //Otherwise let them proceed to description page
+                else {
+                    $('.right > .btn').prop('disabled', false);
+                }
                 break;
+                
+            //Quest description page
+            case 1:
+                //prevent progression if no or invalid description
+                if (!validQuest) {
+                    $('.right > .btn').prop('disabled', true);
+                }
+                else {
+                    $('right > .btn').prop('disabled', false);
+                }
+                //we can go back to change the title if we want to
+                $('.left > .btn').prop('disabled',false);
+                break;
+                    
+            //Last page (confirmation page)
             case numSlides - 1: 
+                //no going further
+                if (!valid)
                 $('.right > .btn').prop('disabled', true);
+                    
+                //should be able to go back
+                $('.left > .btn').prop('disabled',false);
                 break;
+                    
             default:
                 $('.navButton > .btn').prop('disabled', false);
         }
@@ -89,15 +118,19 @@ $(document).ready(function () {
     //TODO: Filter for nonsensical titles (maybe use dictionary)
     $("#slide1 > form").on('submit', function(e) {
         e.preventDefault();
-        if (!preventBadInput){
-            submitQuestName();
-            console.log("prevent");
+        console.log("Submitted title");
+
+        if ($(".right > .btn").prop("disabled") == true){
+            console.log("Input was bad");
+            return false;
         }
         else {
+            submitQuestName();
             return false;
         }
     });
     
+    //submit quest name
     function submitQuestName() {
         var formString = stripHTML($("#slide1 >form > fieldset > input").val());
         $("#slide2 > fieldset > h").html(formString + "<br><small class= " + '"text-muted"' + "> that sounds like fun!</small>");
@@ -108,6 +141,8 @@ $(document).ready(function () {
     
     
     //limit for quest title
+    //Returns false if quest title invalid
+    //Returns true otherwise
     function preventBadInput() {
         var maxTitleLength = 32; //Need to get this from html
         var minTitleLength = 2;
@@ -117,12 +152,10 @@ $(document).ready(function () {
         if (titleLength >= maxTitleLength || titleLength < minTitleLength) {
             $title.addClass('invalid');
             $('.right > .btn').prop('disabled', true);
-            return false;
         }
         else {
             $title.removeClass('invalid');
             $('.right > .btn').prop('disabled', false);
-            return true;
         }
     }
     $("#slide1>form>fieldset>input").on("input", preventBadInput);
@@ -161,8 +194,8 @@ $(document).ready(function () {
     
     function init() {
         setSlideZ();
-        setButtonState();
         validTitle = validQuest = false;
+        setButtonState();
     }
     init();
     
